@@ -21,8 +21,9 @@ class AuthController extends Controller
         $credentials = $request->only('name', 'email', 'password');
         
         $rules = [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users'
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ];
 
         $validator = Validator::make($credentials, $rules);
@@ -51,7 +52,7 @@ class AuthController extends Controller
 
         Mail::send('email.verify', ['name' => $name, 'verification_code' => $verification_code],
             function($mail) use ($email, $name, $subject){
-                $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From User/Company Name Goes Here");
+                $mail->from(getenv('FROM_EMAIL_ADDRESS'), "sinan@mail.com");
                 $mail->to($email, $name);
                 $mail->subject($subject);
             });
@@ -96,8 +97,8 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         
         $rules = [
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:6',
         ];
         $validator = Validator::make($credentials, $rules);
         
